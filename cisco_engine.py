@@ -73,7 +73,7 @@ def deploy_config(device_info, hostname, vlans_list):
             else:
                 return {"status": "warning", "message": "No valid configurations were provided."}
                 
-    except NetmikoException as e:
+    except NetmikoExceptions as e:
         logger.error(f"Network deployment operation failed: {str(e)}")
         return {"status": "error", "message": f"Deployment failed: {str(e)}"}
 
@@ -125,7 +125,7 @@ def validate_config(device_info, expected_hostname, expected_vlans):
             logger.info("State validation passed perfectly! Running profile fully matches intended state.")
             return {"status": "success", "message": "All settings validated successfully. 0 discrepancies found."}
             
-    except NetmikoException as e:
+    except NetmikoExceptions as e:
         logger.error(f"Validation collection loop encountered an issue: {str(e)}")
         return {"status": "error", "message": f"Validation process failed: {str(e)}"}
 
@@ -140,7 +140,7 @@ def save_config(device_info):
             output = net_connect.save_config()
             logger.info("Running-configuration successfully written to NVRAM startup-config.")
             return {"status": "success", "message": "Running configuration saved to NVRAM storage device memory."}
-    except NetmikoException as e:
+    except NetmikoExceptions as e:
         logger.error(f"NVRAM save transaction crashed: {str(e)}")
         return {"status": "error", "message": f"Save operation failed: {str(e)}"}
 
@@ -170,7 +170,7 @@ def backup_config(device_info):
             logger.info(f"Backup file successfully generated locally: {filename}")
             return {"status": "success", "message": f"Configuration backup completed successfully: {filename}"}
             
-    except NetmikoException as e:
+    except NetmikoExceptions as e:
         logger.error(f"Offbox backup engine transaction terminated unexpectedly: {str(e)}")
         return {"status": "error", "message": f"Backup script generation sequence failed: {str(e)}"}
 
