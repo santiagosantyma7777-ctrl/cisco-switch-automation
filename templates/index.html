@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cisco Switch Automation Console</title>
+    <!-- Dynamic CDN loading of Tailwind CSS for a modern, responsive web application interface -->
+    <script src="https://jsdelivr.net"></script>
+</head>
+<body class="bg-gray-900 text-gray-100 min-h-screen font-sans">
+
+    <div class="container mx-auto px-4 py-8 max-w-5xl">
+        <!-- Header Section -->
+        <header class="mb-8 text-center border-b border-gray-800 pb-6">
+            <h1 class="text-3xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">
+                Cisco Infrastructure Automation Console
+            </h1>
+            <p class="text-gray-400 mt-2 text-sm">Granular Frontend Switch Configuration, Validation, and State Lifecycle Controller</p>
+        </header>
+
+        <!-- Configuration Forms Section -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            
+            <!-- Panel 1: Device Connection Parameter Configuration -->
+            <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 shadow-xl">
+                <h2 class="text-lg font-bold mb-4 text-blue-400 flex items-center gap-2">
+                    🖥️ Target Connection Settings
+                </h2>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Switch IP Address</label>
+                        <input type="text" id="host" value="{{ default_host }}" class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-sm text-gray-200 focus:outline-none focus:border-blue-500 font-mono">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">SSH Username</label>
+                        <input type="text" id="username" value="{{ default_user }}" class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-sm text-gray-200 focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">SSH Password</label>
+                            <input type="password" id="password" value="{{ default_pass }}" class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-sm text-gray-200 focus:outline-none focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Enable Secret</label>
+                            <input type="password" id="secret" value="{{ default_secret }}" class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-sm text-gray-200 focus:outline-none focus:border-blue-500">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Panel 2: Desired Configuration Intent -->
+            <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 shadow-xl">
+                <h2 class="text-lg font-bold mb-4 text-indigo-400 flex items-center gap-2">
+                    🎯 Desired Configuration Intent
+                </h2>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Device Hostname</label>
+                        <input type="text" id="hostname" value="SWITCH_AUTOMATED" class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-sm text-gray-200 focus:outline-none focus:border-indigo-500 font-semibold">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">VLAN Profiles Database</label>
+                        
+                        <div class="flex items-center gap-2 bg-gray-900 p-2 border border-gray-700 rounded">
+                            <span class="bg-blue-900 text-blue-200 font-mono text-xs font-bold px-2 py-1 rounded w-16 text-center">VLAN 10</span>
+                            <input type="text" id="vlan10_name" value="VLAN_DATA" class="bg-transparent w-full text-sm text-gray-200 focus:outline-none">
+                        </div>
+
+                        <div class="flex items-center gap-2 bg-gray-900 p-2 border border-gray-700 rounded">
+                            <span class="bg-orange-900 text-orange-200 font-mono text-xs font-bold px-2 py-1 rounded w-16 text-center">VLAN 20</span>
+                            <input type="text" id="vlan20_name" value="VLAN_VOICE" class="bg-transparent w-full text-sm text-gray-200 focus:outline-none">
+                        </div>
+
+                        <div class="flex items-center gap-2 bg-gray-900 p-2 border border-gray-700 rounded">
+                            <span class="bg-purple-900 text-purple-200 font-mono text-xs font-bold px-2 py-1 rounded w-16 text-center">VLAN 50</span>
+                            <input type="text" id="vlan50_name" value="VLAN_SECURITY" class="bg-transparent w-full text-sm text-gray-200 focus:outline-none">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Panel 3: Granular Network Engineering Workflow Execution Center -->
+        <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 shadow-xl mb-6">
+            <h2 class="text-lg font-bold mb-4 text-emerald-400 flex items-center gap-2">
+                ⚙️ Operations Execution Center
+            </h2>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                <button onclick="triggerAction('/deploy')" class="bg-blue-600 hover:bg-blue-500 text-white py-3 px-4 rounded-lg font-semibold text-sm transition-colors shadow-md cursor-pointer flex flex-col items-center justify-center gap-1">
+                    <span class="text-lg">🔵</span> Deploy Configuration
+                </button>
+                <button onclick="triggerAction('/validate')" class="bg-amber-600 hover:bg-amber-500 text-white py-3 px-4 rounded-lg font-semibold text-sm transition-colors shadow-md cursor-pointer flex flex-col items-center justify-center gap-1">
+                    <span class="text-lg">🟡</span> Validate Setup
+                </button>
+                <button onclick="triggerAction('/save')" class="bg-emerald-600 hover:bg-emerald-500 text-white py-3 px-4 rounded-lg font-semibold text-sm transition-colors shadow-md cursor-pointer flex flex-col items-center justify-center gap-1">
+                    <span class="text-lg">🟢</span> Save to NVRAM
+                </button>
+                <button onclick="triggerAction('/backup')" class="bg-purple-600 hover:bg-purple-500 text-white py-3 px-4 rounded-lg font-semibold text-sm transition-colors shadow-md cursor-pointer flex flex-col items-center justify-center gap-1">
+                    <span class="text-lg">🟣</span> Download Backup
+                </button>
+            </div>
+        </div>
+
+        <!-- Panel 4: Real-time Live Asynchronous Interactive Engine Logging Terminal -->
+        <div class="bg-gray-900 border border-gray-800 rounded-xl shadow-2xl overflow-hidden flex flex-col h-72">
+            <div class="bg-gray-800 px-4 py-2 border-b border-gray-700 flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 rounded-full bg-red-500"></span>
+                    <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
+                    <span class="w-3 h-3 rounded-full bg-green-500"></span>
+                    <span class="text-xs font-mono font-bold text-gray-400 ml-2">Execution Stream Logs</span>
+                </div>
+                <button onclick="document.getElementById('console').textContent = '[SYSTEM] Console logging buffer cleared.\n';" class="text-xs text-gray-500 hover:text-gray-300 transition-colors font-mono cursor-pointer">
+                    Clear Logs
+                </button>
+            </div>
+            <pre id="console" class="p-4 font-mono text-xs text-green-400 overflow-y-auto flex-1 bg-black leading-relaxed">[SYSTEM] Console session tracking initialized. Awaiting pipeline action execution input...
+</pre>
+        </div>
+    </div>
+
+    <!-- Frontend Asynchronous AJAX Engine Script Core Layer -->
+    <script>
+        async function triggerAction(endpoint) {
+            const consoleEl = document.getElementById('console');
+            
+            // Collect active parameters from the forms layout payload
+            const payload = {
+                host: document.getElementById('host').value.trim(),
+                username: document.getElementById('username').value.trim(),
+                password: document.getElementById('password').value,
+                secret: document.getElementById('secret').value,
+                hostname: document.getElementById('hostname').value.trim(),
+                vlan10_name: document.getElementById('vlan10_name').value.trim(),
+                vlan20_name: document.getElementById('vlan20_name').value.trim(),
+                vlan50_name: document.getElementById('vlan50_name').value.trim()
+            };
+
+            // Basic safety checking for network inputs
+            if (!payload.host || !payload.username) {
+                consoleEl.textContent += `[ERROR] Blocked: Connection parameters (Host IP and Username) cannot be blank.\n`;
+                consoleEl.scrollTop = consoleEl.scrollHeight;
+                return;
+            }
+
+            consoleEl.textContent += `\n[REQUEST] Contacting local server controller pipeline endpoint: ${endpoint}...\n`;
+            consoleEl.scrollTop = consoleEl.scrollHeight;
+
+            try {
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) throw new Error(`HTTP transaction layer returned status error: ${response.status}`);
+                
+                const data = await response.json();
+
+                // Append parsed logs pushed back from the Netmiko background thread buffer
+                if (data.logs) {
+                    consoleEl.textContent += data.logs;
+                }
+
+                // Parse operational statuses to flash distinct alert message strings
+                if (data.result) {
+                    const res = data.result;
+                    if (res.status === 'success') {
+                        consoleEl.textContent += `[SUCCESS] ${res.message}\n`;
+                    } else if (res.status === 'alert' || res.status === 'warning') {
+                        consoleEl.textContent += `[WARNING ALERT] ${res.message}\n`;
+                        if (res.errors && res.errors.length > 0) {
+                            res.errors.forEach(err => {
+                                consoleEl.textContent += `  ⚠️ Mismatch detected: ${err}\n`;
+                            });
+                        }
+                    } else {
+                        consoleEl.textContent += `[API ERROR] ${res.message}\n`;
+                    }
+                }
+            } catch (err) {
+                consoleEl.textContent += `[CRITICAL FAULT] JavaScript pipeline transaction failed: ${err.message}\n`;
+            }
+
+            // Keep the interactive log scrolling anchored cleanly to the newest line
+            consoleEl.scrollTop = consoleEl.scrollHeight;
+        }
+    </script>
+</body>
+</html>
+
