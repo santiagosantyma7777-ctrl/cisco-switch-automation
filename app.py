@@ -30,56 +30,66 @@ def _extract_device_info(form_data):
 
 @app.route('/deploy', methods=['POST'])
 def deploy():
-    """Handles the blue granular config deployment trigger mechanism."""
     data = request.json
     device_info = _extract_device_info(data)
     hostname = data.get('hostname', 'SWITCH_AUTOMATED')
-    
-    # Map the exact mandatory target profile VLANs from the assignment instructions
     intended_vlans = [
         {'id': 10, 'name': data.get('vlan10_name', 'VLAN_DATA')},
         {'id': 20, 'name': data.get('vlan20_name', 'VLAN_VOICE')},
         {'id': 50, 'name': data.get('vlan50_name', 'VLAN_SECURITY')}
     ]
     
-    result = cisco_engine.deploy_config(device_info, hostname, intended_vlans)
+    try:
+        result = cisco_engine.deploy_config(device_info, hostname, intended_vlans)
+    except Exception as e:
+        result = {"status": "error", "message": f"Server processing fault: {str(e)}"}
+        
     logs = cisco_engine.get_log_output()
     return jsonify({'result': result, 'logs': logs})
 
+
 @app.route('/validate', methods=['POST'])
 def validate():
-    """Handles the yellow operational validation loop state check."""
     data = request.json
     device_info = _extract_device_info(data)
     hostname = data.get('hostname', 'SWITCH_AUTOMATED')
-    
     intended_vlans = [
         {'id': 10, 'name': data.get('vlan10_name', 'VLAN_DATA')},
         {'id': 20, 'name': data.get('vlan20_name', 'VLAN_VOICE')},
         {'id': 50, 'name': data.get('vlan50_name', 'VLAN_SECURITY')}
     ]
     
-    result = cisco_engine.validate_config(device_info, hostname, intended_vlans)
+    try:
+        result = cisco_engine.validate_config(device_info, hostname, intended_vlans)
+    except Exception as e:
+        result = {"status": "error", "message": f"Server processing fault: {str(e)}"}
+        
     logs = cisco_engine.get_log_output()
     return jsonify({'result': result, 'logs': logs})
 
 @app.route('/save', methods=['POST'])
 def save():
-    """Handles the green trigger targeting permanent NVRAM memory write routines."""
     data = request.json
     device_info = _extract_device_info(data)
     
-    result = cisco_engine.save_config(device_info)
+    try:
+        result = cisco_engine.save_config(device_info)
+    except Exception as e:
+        result = {"status": "error", "message": f"Server processing fault: {str(e)}"}
+        
     logs = cisco_engine.get_log_output()
     return jsonify({'result': result, 'logs': logs})
 
 @app.route('/backup', methods=['POST'])
 def backup():
-    """Handles the purple offbox raw configuration text dump routing."""
     data = request.json
     device_info = _extract_device_info(data)
     
-    result = cisco_engine.backup_config(device_info)
+    try:
+        result = cisco_engine.backup_config(device_info)
+    except Exception as e:
+        result = {"status": "error", "message": f"Server processing fault: {str(e)}"}
+        
     logs = cisco_engine.get_log_output()
     return jsonify({'result': result, 'logs': logs})
 
