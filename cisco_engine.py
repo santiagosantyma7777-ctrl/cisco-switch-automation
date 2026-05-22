@@ -38,7 +38,12 @@ def _get_connection_dict(device_info):
         'username': device_info['username'],
         'password': device_info['password'],
         'secret': device_info['secret'],
-        'fast_cli': False
+        'fast_cli': False,
+        # Force broad cryptographic backward compatibility for legacy lab images
+        'ssh_config_dict': {
+            'KexAlgorithms': 'diffie-hellman-group14-sha1,diffie-hellman-group-exchange-sha1',
+            'HostKeyAlgorithms': 'ssh-rsa'
+        }
     }
 
 def deploy_config(device_info, hostname, vlans_list):
