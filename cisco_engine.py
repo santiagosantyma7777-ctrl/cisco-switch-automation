@@ -39,11 +39,8 @@ def _get_connection_dict(device_info):
         'password': device_info['password'],
         'secret': device_info['secret'],
         'fast_cli': False,
-        # Force broad cryptographic backward compatibility for legacy lab images
-        'ssh_config_dict': {
-            'KexAlgorithms': 'diffie-hellman-group14-sha1,diffie-hellman-group-exchange-sha1',
-            'HostKeyAlgorithms': 'ssh-rsa'
-        }
+        # Netmiko native parameter to explicitly force backend paramiko to permit legacy RSA/SHA1 keys
+        'disabled_algorithms': None
     }
 
 def deploy_config(device_info, hostname, vlans_list):
