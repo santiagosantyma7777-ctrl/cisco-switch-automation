@@ -10,7 +10,27 @@ Centralized management engines like FortiManager and Panorama require separate c
 ---
 
 ## Phase 1: Lab Topology & Architecture Blueprint
-[ Lab Internal Subnet ]                                                  [ Lab Internal Subnet ]192.168.80.0/24                                                           10.0.1.0/24|                                                                       |v                                                                       v+-----------------------------+                                        +-----------------------------+|    FORTIGATE FIREWALL       |                                        |     PALO ALTO FIREWALL      ||  (Direct REST API Access)   |                                        |  (Direct XML API / SDK)     ||                             |                                        |                             ||  Physical WAN: wan1         | <========== Encrypted IPSec =========> |  Physical WAN: ethernet1/1  ||  Public IP: 1.1.1.1         |             VPN Tunnel                 |  Public IP: 2.2.2.2         ||                             |                                        |                             ||  Tunnel Interface: vpn_palo |                                        |  Tunnel Interface: tunnel.1 ||  Tunnel IP: 10.255.100.1/30 |                                        |  Tunnel IP: 10.255.100.2/30 |+-----------------------------+                                        +-----------------------------+
+
+```text
+[ Lab Internal Subnet ]                                                  [ Lab Internal Subnet ]
+   192.168.80.0/24                                                           10.0.1.0/24
+
+
+          |                                                                       |
+          v                                                                       v
++-----------------------------+                                        +-----------------------------+
+
+|    FORTIGATE FIREWALL       |                                        |     PALO ALTO FIREWALL      |
+|  (Direct REST API Access)   |                                        |  (Direct XML API / SDK)     |
+|                             |                                        |                             |
+|  Physical WAN: wan1         | <========== Encrypted IPSec =========> |  Physical WAN: ethernet1/1  |
+|  Public IP: 1.1.1.1         |             VPN Tunnel                 |  Public IP: 2.2.2.2         |
+|                             |                                        |                             |
+|  Tunnel Interface: vpn_palo |                                        |  Tunnel Interface: tunnel.1 |
+|  Tunnel IP: 10.255.100.1/30 |                                        |  Tunnel IP: 10.255.100.2/30 |
++-----------------------------+                                        +-----------------------------+
+```
+
 
 ### Cryptographic Standard Profile
 * **IKE Protocol Version**: IKEv2
