@@ -159,18 +159,7 @@ You **cannot** write a single configuration script or command template that runs
 - Officially recommends **DH Group 19 or 31** for general deployments
 - Multi DH groups is supported for both phase 1 and phase 2, will attempt to match the strongest common group with the peer
 
-<aside>
-💡
 
-Phase 1 CLI example: 
-
-![image.png](attachment:137ba2d4-09a1-4dd2-a6bf-8160bd9f8252:image.png)
-
-Phase 2 CLI example: 
-
-![image.png](attachment:709f5304-85f3-44f3-8389-b8b9b610e5ff:image.png)
-
-</aside>
 
 ### PAN-OS
 
