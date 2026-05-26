@@ -40,6 +40,41 @@ Centralized management engines like FortiManager and Panorama require separate c
 
 ---
 
+### script's logical flow, using Python
+
+<aside>
+💡
+
+```
+              +-----------------------------------+
+
+              |  Master YAML / JSON Variable File |
+              +-----------------------------------+
+
+                                |
+                                v
+              +-----------------------------------+
+              |       Your Main Python Script     |
+              +-----------------------------------+
+                           /         \\
+                          /           \\
+                         v             v
+         +-----------------------+     +-----------------------+
+
+         |   FortiOS API Client  |     |  pan-os-python SDK    |
+         +-----------------------+     +-----------------------+
+
+                     |                             |
+                     v                             v
+         +-----------------------+     +-----------------------+
+
+         |    FortiGate Config   |     |   Palo Alto Config    |
+         +-----------------------+     +-----------------------+
+```
+
+</aside>
+
+
 ## Phase 2: Master Variable Schema (`config.json`)
 Save this unified, normalized dictionary file in your script directory. It serves as your single source of truth.
 
