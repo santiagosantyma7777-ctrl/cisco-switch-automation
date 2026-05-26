@@ -112,6 +112,39 @@ Palo Alto is staged and quiet. Now, execute the FortiGate configurations. They w
 4. **Configure Routing**: Create a static route pointing target subnet `10.0.1.0/24` down the `vpn_palo` interface.
 5. **Create Firewall Policies**: Build two distinct firewall policy objects allowing traffic bidirectionally between your internal physical port and the `vpn_palo` virtual interface.
 
+### Step 3.5: Pre-Flight Intent & Configuration Validation
+
+Before initiating tunnel negotiation, the automation engine must perform an independent configuration audit. This step confirms the firewall operating systems accepted and structured the cryptographic variables exactly as intended.
+
+```jsx
++------------------------+      API GET      +-----------------------+
+
+|  Your Python Script    | ================> | FortiGate CMDB Engine | (Validates JSON keys)
+| (Reads config.json)    |                   +-----------------------+
+|                        |
+|  Pre-Flight Check      | === Validate ===> | Palo Alto Candidate   | (Syntax validation 
++------------------------+     Request       +-----------------------+  before live commit)
+```
+
+### 3.5.1. FortiGate Pre-Flight Intent Verification
+
+Immediately after pushing the configuration via the REST API, the script executes an HTTP `GET` request to the configuration database (CMDB) endpoint before checking runtime status:
+
+- **Target Path**: `/api/v2/cmdb/vpn.ipsec/phase1-interface/lab-vpn-tunnel`
+- **Validation Logic**: The script parses the returned JSON string and programmatically verifies that:
+    - `dhgrp` == `"19"`
+    - `proposal` == `"aes256gcm"`
+    - `ike-version` == `"2"`
+- **Failure Handling**: If any parameter is missing, mismatched, or if the API returns a status other than `200 OK`, the script triggers an alert and halts execution before proceeding to the Palo Alto validation phase.
+
+### 3.5.2. Palo Alto Candidate Transaction Validation
+
+To prevent a broken configuration from going live, the script runs a semantic configuration check on the Palo Alto candidate database before executing the final `commit`:
+
+- **API Action**: Sends an operational transaction validation command (`<validate></validate>`).
+- **Validation Logic**: The Palo Alto parsing engine checks for unmapped objects, duplicate profiles, unassigned zone interfaces, or missing routing parameters.
+- **Failure Handling**: If the validation returns errors, the script stops the pipeline, outputs the exact line numbers and component warnings, and flashes a warning notification to your Slack/Teams channel.
+
 ### Step 4: Finalise Palo Alto Commit
 Execute a POST request to Palo Alto's API calling a configuration commit. The moment the commit success status reaches 100%, the Palo Alto engine comes alive, notices the active IKE probes hitting its WAN from the FortiGate, and begins negotiation.
 
