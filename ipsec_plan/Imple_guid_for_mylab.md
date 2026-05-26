@@ -244,3 +244,40 @@ if __name__ == "__main__":
     run_lab_test_suite()
 ```
 
+## Phase 5: Common Lab Troubleshooting Matrix
+
+<aside>
+💡
+
+| Observed Symptom | Likely Failure Cause | How to Verify via API / CLI | Remediation Step |
+| --- | --- | --- | --- |
+| Palo Alto state shows `init` indefinitely | FortiGate is not receiving or responding to Phase 1 packets. | Check FortiGate system logs via API for `IKEv2 negotiate timeout`. | Verify that a local route or cloud security group allows **UDP Ports 500 and 4500** between public interfaces. |
+| Logs show `no proposal chosen` | Mismatched crypto settings or incorrect Phase 1 Pre-Shared Key. | Call the configuration audit layer script to pull applied parameters. | Cross-reference encryption strings. Ensure GCM vs CBC variants match across variable dictionaries. |
+| Logs show `ts_unacceptable` or `Proxy ID mismatch` | Phase 2 subnets do not mirror each other perfectly. | Look for this exact message text in the Palo Alto system log collector. | Ensure FortiGate's Phase 2 source matches Palo Alto's Remote Proxy ID exactly (`192.168.80.0/24`). |
+| Combined test script reports Mode 2 Success | ICMP routing works, but administrative permissions block the ping execution. | Verify FortiGate network parameters via the API block. | Ensure the target FortiGate internal interface has `set allowaccess ping` enabled. |
+</aside>
+
+## Phase 6: Post-Flight Configuration Drift Monitoring
+
+To combat the "Automation Trap" (where manual administrator changes or system reboots alter configuration states after your deployment completes), a continuous monitoring engine should be configured as a local scheduled cron job or serverless function.
+
+### Scheduled Audit Loop Workflow
+
+1. The audit script awakens periodically (e.g., every 60 minutes).
+2. It parses your immutable `config.json` baseline schema file.
+3. It calls the live configuration endpoints on both the FortiGate and Palo Alto appliances.
+4. It compares the live running parameters against the baseline variables.
+
+### Drift Remediation & Alerting Matrix
+
+If any unapproved administrative adjustments are identified, the script generates a targeted alert notification payload:
+
+```
+🟥 VPN CONFIGURATION DEVIATION DETECTED
+• Tunnel Gateway    : lab-vpn-tunnel
+• Affected Asset    : FortiGate-7.2-Lab
+• Expected Parameter: dhgrp = 19
+• Live Parameter    : dhgrp = 14 (MISMATCH)
+• Status            : Configuration drift detected.
+• Remediation Action: Automatic override playbook queued.
+```
