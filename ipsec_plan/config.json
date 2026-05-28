@@ -16,14 +16,14 @@
   },
   "endpoints": {
     "fortigate": {
-      "mgmt_ip": "192.168.1.99",
+      "mgmt_ip": "forti_ip",
       "public_wan_ip": "1.1.1.1",
       "wan_interface_name": "wan1",
       "internal_lan_cidr": "192.168.80.0/24",
       "tunnel_interface_name": "vpn_palo"
     },
     "paloalto": {
-      "mgmt_ip": "192.168.1.100",
+      "mgmt_ip": "palo_ip",
       "public_wan_ip": "2.2.2.2",
       "wan_interface_name": "ethernet1/1",
       "internal_lan_cidr": "10.0.1.0/24",
